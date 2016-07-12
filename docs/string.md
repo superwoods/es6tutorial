@@ -133,7 +133,7 @@ String.fromCodePoint(0x78, 0x1f680, 0x79) === 'x\uD83D\uDE80y'
 // true
 ```
 
-上面代码中，如果`String.fromCharCode`方法有多个参数，则它们会被合并成一个字符串返回。
+上面代码中，如果`String.fromCodePoint`方法有多个参数，则它们会被合并成一个字符串返回。
 
 注意，`fromCodePoint`方法定义在`String`对象上，而`codePointAt`方法定义在字符串的实例对象上。
 
@@ -191,7 +191,7 @@ ES5对字符串对象提供`charAt`方法，返回字符串给定位置的字符
 
 ## normalize()
 
-为了表示语调和重音符号，Unicode提供了两种方法。一种是直接提供带重音符号的字符，比如`Ǒ`（\u01D1）。另一种是提供合成符号（combining character），即原字符与重音符号的合成，两个字符合成一个字符，比如`O`（\u004F）和`ˇ`（\u030C）合成`Ǒ`（\u004F\u030C）。
+许多欧洲语言有语调符号和重音符合。为了表示它们，Unicode提供了两种方法。一种是直接提供带重音符号的字符，比如`Ǒ`（\u01D1）。另一种是提供合成符号（combining character），即原字符与重音符号的合成，两个字符合成一个字符，比如`O`（\u004F）和`ˇ`（\u030C）合成`Ǒ`（\u004F\u030C）。
 
 这两种表示方法，在视觉和语义上都等价，但是JavaScript不能识别。
 
@@ -211,7 +211,7 @@ ES6提供字符串实例的`normalize()`方法，用来将字符的不同表示�
 // true
 ```
 
-`normalize`方法可以接受四个参数。
+`normalize`方法可以接受一个参数来指定`normalize`的方式，参数的四个可选值如下。
 
 - `NFC`，默认参数，表示“标准等价合成”（Normalization Form Canonical Composition），返回多个简单字符的合成字符。所谓“标准等价”指的是视觉和语义上的等价。
 - `NFD`，表示“标准等价分解”（Normalization Form Canonical Decomposition），即在标准等价的前提下，返回合成字符分解的多个简单字符。
@@ -354,18 +354,18 @@ ES7推出了字符串补全长度的功能。如果某个字符串不够指定�
 传统的JavaScript语言，输出模板通常是这样写的。
 
 ```javascript
-$("#result").append(
-  "There are <b>" + basket.count + "</b> " +
-  "items in your basket, " +
-  "<em>" + basket.onSale +
-  "</em> are on sale!"
+$('#result').append(
+  'There are <b>' + basket.count + '</b> ' +
+  'items in your basket, ' +
+  '<em>' + basket.onSale +
+  '</em> are on sale!'
 );
 ```
 
 上面这种写法相当繁琐不方便，ES6引入了模板字符串解决这个问题。
 
 ```javascript
-$("#result").append(`
+$('#result').append(`
   There are <b>${basket.count}</b> items
    in your basket, <em>${basket.onSale}</em>
   are on sale!
@@ -390,7 +390,7 @@ var name = "Bob", time = "today";
 `Hello ${name}, how are you ${time}?`
 ```
 
-上面代码中的字符串，都是用反引号表示。如果在模板字符串中需要使用反引号，则前面要用反斜杠转义。
+上面代码中的模板字符串，都是用反引号表示。如果在模板字符串中需要使用反引号，则前面要用反斜杠转义。
 
 ```javascript
 var greeting = `\`Yo\` World!`;
@@ -399,11 +399,24 @@ var greeting = `\`Yo\` World!`;
 如果使用模板字符串表示多行字符串，所有的空格和缩进都会被保留在输出之中。
 
 ```javascript
-$("#warning").html(`
-  <h1>Watch out!</h1>
-  <p>Unauthorized hockeying can result in penalties
-  of up to ${maxPenalty} minutes.</p>
+$('#list').html(`
+<ul>
+  <li>first</li>
+  <li>second</li>
+</ul>
 `);
+```
+
+上面代码中，所有模板字符串的空格和换行，都是被保留的，比如`<ul>`标签前面会有一个换行。如果你不想要这个换行，可以使用`trim`方法消除它。
+
+
+```javascript
+$('#list').html(`
+<ul>
+  <li>first</li>
+  <li>second</li>
+</ul>
+`.trim());
 ```
 
 模板字符串中嵌入变量，需要将变量名写在`${}`之中。
